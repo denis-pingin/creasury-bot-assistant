@@ -13,6 +13,7 @@ export function init() {
     db.createIndex('events', { 'originalInviter.id': 1 }, { name: 'originalInviterId' });
     db.createIndex('events', { 'timestamp': 1 }, { name: 'timestamp' });
     db.createIndex('events', { 'stagePoints': 1 }, { name: 'stagePoints' });
+    db.createIndex('events', { 'processed': 1 }, { name: 'processed' });
   });
 }
 
@@ -45,6 +46,7 @@ export async function addJoinEvent(member, inviter, fake) {
     inviter: inviter,
     fake: fake,
     timestamp: timestamp,
+    processed: false,
   });
   return timestamp;
 }
@@ -57,6 +59,7 @@ export async function addLeaveEvent(member) {
     guildId: member.guild.id,
     user: member.user,
     timestamp: timestamp,
+    processed: false,
   });
   return timestamp;
 }
