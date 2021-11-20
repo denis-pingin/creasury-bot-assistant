@@ -1,0 +1,52 @@
+{
+  "name": "creasury-bot-assistant",
+  "version": "1.0.0",
+  "description": "Covering up for the Creasury Bot.",
+  "main": "./src/index.js",
+  "scripts": {
+    "babel": "babel ./src -d build --source-maps true",
+    "lint": "eslint src --fix",
+    "start": "babel-node ./src/index.js",
+    "test": "jest --runInBand",
+    "simulation": "jest test/simulation.test.js --testPathIgnorePatterns"
+  },
+  "dependencies": {
+    "@discordjs/builders": "^0.8.2",
+    "@discordjs/rest": "^0.1.0-canary.0",
+    "discord-api-types": "^0.24.0",
+    "discord.js": "^13.3.1",
+    "dotenv": "^10.0.0",
+    "mongodb": "^4.1.4",
+    "regenerator-runtime": "^0.13.9"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": "defaults"
+        }
+      ]
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "@babel/node": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
+    "@shelf/jest-mongodb": "^2.1.0",
+    "babel-jest": "^27.3.1",
+    "eslint": "^8.2.0",
+    "jest": "^27.3.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/creasury/creasury-bot-assistant.git"
+  },
+  "author": "Creasury Monarch",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/creasury/creasury-bot-assistant/issues"
+  },
+  "homepage": "https://github.com/creasury/creasury-bot-assistant#readme"
+}
