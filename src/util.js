@@ -1,16 +1,23 @@
 import { config } from './config';
 import * as util from 'util';
+import * as db from './db';
 
 export async function sendLogMessage(client, message) {
   console.log(`#log: ${message}`);
 
   if (!client) return;
 
-  const channel = client.channels.cache.get(config.logChannelId);
-  if (!channel) {
-    console.log('Warning: log channel not found');
+  const guildConfig = await db.getGuildConfig(config.guildId);
+
+  if (guildConfig.logChannelId) {
+    const channel = client.channels.cache.get(guildConfig.logChannelId);
+    if (channel) {
+      await channel.send(message);
+    } else {
+      console.warn(`Log channel with ID ${guildConfig.logChannelId} not found!`);
+    }
   } else {
-    await channel.send(message);
+    console.warn('Log channel ID not configured');
   }
 }
 

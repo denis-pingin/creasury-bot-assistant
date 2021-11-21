@@ -2,7 +2,7 @@ import { Client, Intents } from 'discord.js';
 import { getInviterTag, getUserTag, logObject, sendLogMessage } from './util';
 import * as inviteTracker from './invite-tracker';
 import { config } from './config';
-import * as db from "./db";
+import * as db from './db';
 
 export function createClient() {
   const client = new Client({
@@ -50,8 +50,14 @@ export function addEventHandlers(client) {
       // Log
       await sendLogMessage(client, `New member joined ${getUserTag(member.user)} invited by ${getInviterTag(inviter)}.`);
 
-      // Check account age
-      const fake = Date.now() - member.user.createdAt < 1000 * 60 * 60 * 24 * config.minAccountAge;
+      // Get guild config
+      const guildConfig = await db.getGuildConfig(member.guild.id);
+
+      // Check account age for fake detection
+      let fake;
+      if (!guildConfig.minAccountAge) {
+        fake = Date.now() - member.user.createdAt < 1000 * 60 * 60 * 24 * guildConfig.minAccountAge;
+      }
 
       // Create event
       await db.addJoinEvent(member, inviter, fake);

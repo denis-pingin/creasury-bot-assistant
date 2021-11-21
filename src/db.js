@@ -1,6 +1,6 @@
 import { config } from './config';
 
-import { MongoClient } from 'mongodb';
+import { MongoClient, ReturnDocument } from 'mongodb';
 
 const cache = {};
 
@@ -33,6 +33,23 @@ async function getConnection() {
 async function getDatabase() {
   const connection = await getConnection();
   return connection.db(config.dbName);
+}
+
+export async function getGuildConfig(guildId) {
+  const database = await getDatabase();
+  const result = await database.collection('config').findOneAndUpdate({ guildId }, {
+    $set: {
+      guildId: guildId,
+    },
+  }, {
+    upsert: true,
+    returnDocument: ReturnDocument.AFTER,
+  });
+  const guildConfig = result.value;
+  if (!guildConfig.excludedFromRanking) {
+    guildConfig.excludedFromRanking = [];
+  }
+  return guildConfig;
 }
 
 export async function addJoinEvent(member, inviter, fake) {
